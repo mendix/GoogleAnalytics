@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="GoogleAnalytics.widget.EventTracker" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>EventTracker</name>
+    <description>EventTracker</description>
+    <icon>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+        bWFnZVJlYWR5ccllPAAAApxJREFUeNp0U+9rklEUftR3zmn+etUUko39qhEbZlbSp8GiIqgPBUFB
+        0D/Ql2DQ5772Iao/ogjamBDRiFZZRCxqFDaH5rLQnE6Zmj+n7u2c296xwg68cO9973Oe55znHk18
+        VUGlBqx+B8q/AKsF+PqtE6xWq2f1ev10rVZLu1zyvf59WKg3EOkzAIP9gMMOEZKi/FnINiCdwei7
+        xdjDcrnsbzQa2NzchKIowx6P524iYYLBYHg/ftBzle5GNRpgawvQMtjtBCIruPQq/DaWz+f9xAyb
+        zQan0wkCw+FwQKfToVgsHg2/WV7+HMV5JtQSWiuTlI8RTD6dX3jQ09MDq9UKDaUnZnQ6HfAZg3lv
+        sVjEfjYUmV1cgk8oqFL9occrtyVJgtFoJFlbUIPXrGb33mQyCYJnLwu3MllK8Pw1TudyucOyLP8F
+        5tCSRmbkcwapSVhJNps9ld/AcelL9OcUX/o3WDKrYvmtVkvs+eNE/LXbbfxI44xEF05yrYpqxza4
+        2WyKJprNZpCVQo2qgMPlcmFtreQlEmkPJ1CBvCa7hExmSSaTO8zqnV390dM7UEKkYpqBLJkZ+Wep
+        VGLbRBKVXQ1OVigUEAwGC9L+EeeLSKQ9zfZx9kqlsgPs7e1Ft/5wcG/8Pm9YCvjwZOnT4FImk/Fz
+        An6BbB2DuwWzM4HX640NDWBGOzYMnJgcuJlKpUTjuH613m5gJmBXLl44cmN8jKxuNIEDIwhNTExc
+        525zCf8LGjDhiM/nu3ZoHHM6ao3UIVeKJRomWb7jdruTiUTiPj2sPq5xe5hEOcxut9s3AoHAZWr4
+        fG6dJtdMCYQl5Ey9XsfQoGvuWCAgR2OdK/F4fIqA58gZhUqbIVvnPZ69j0aH0F78UCUMzwzwW4AB
+        AG0CTWyOiNcpAAAAAElFTkSuQmCC
+    </icon>
+    <properties>
+        <property key="category" type="string">
+            <caption>Category</caption>
+            <category>Behavior</category>
+            <description>Category</description>
+        </property>
+        <property key="action" type="string">
+            <caption>Action</caption>
+            <category>Behavior</category>
+            <description>Action</description>
+        </property>
+        <property key="label" type="attribute" required="false">
+            <caption>Label</caption>
+            <category>Behavior</category>
+            <description>Label</description>
+            <attributeTypes>
+                <attributeType name="AutoNumber"/>
+                <attributeType name="Currency"/>
+                <attributeType name="Enum"/>
+                <attributeType name="Float"/>
+                <attributeType name="Integer"/>
+                <attributeType name="Long"/>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="value" type="attribute" required="false"> 
+            <caption>Value</caption>
+            <category>Behavior</category>
+            <description>Value</description>
+            <attributeTypes>
+                <attributeType name="AutoNumber"/>
+                <attributeType name="Integer"/>
+                <attributeType name="Long"/>
+            </attributeTypes>
+        </property>
+        <property key="addEvent" type="boolean" defaultValue="true">
+            <caption>Active</caption>
+            <category>Behavior</category>
+            <description>Enable/disable event tracking</description>
+        </property>
+        <property key="uaTrackCode" type="string" defaultValue="UA-">
+            <caption>UA-XXX-XX</caption>
+            <category>Behavior</category>
+            <description>The UA-XXX-XX code for including google analytics code inside the webpage.</description>
+        </property>
+    </properties>
+</widget>

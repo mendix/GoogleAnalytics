@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="GoogleAnalytics.widget.EventTrackerButton" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+    <name>EventTrackerButton</name>
+    <description>EventTrackerButton</description>
+    <icon>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+        bWFnZVJlYWR5ccllPAAAAp1JREFUeNp0U91Lk2EU/+3du+k0v+b8ooU0MwYhQ8VWIAjSB0Ux6qaC
+        oH+gm0DoutsuorrtNgohRRFjKlSkeNMghmH4sbFkOTa2OcWP6T7ezu/BNzTswPPyPM97zvn9zvmd
+        xzJhzCCBJFaTEWxvb6OmpgZra2v+nZ2dW3a7fWh3d/e3y+V63dbW9imfz/+orKxER7MHXpwDTS+j
+        pDZ1dXVIJpOdoVBoeGtrq1uccXBwAMMwOlpbW19Fo1FI8Dev1/voPDw/rdBQQFG+Yj5cwMrKyv3Z
+        2dnldDrdLcior6+HIEOC0djYCKvVilwu1zc/P784k/1ypxMe2KBD42ZiIzgwPT393mazKSYWi4XI
+        KJVK4B2Dea6trVXnycnJ0Tf5tz7FIIU0gsHgC13XUVVVhXK5DNO4J5uj5+rqagUwNzf3PGSEoQ2v
+        jl5PpVI9TqfzWDBN0zSFyHsGmUnIRPp1TUq6rC8tLQ3S6V8jZbIi/UKhoM5cTMRVLBaRSCRu6OJw
+        lbXy59Hg/f191UTKKlIqNiYDWlNTE4S5W0D0U0xgBnJPrUmTKLFY7C+y6XOkP3ZdLsaFxRADSZmI
+        /Lm5uUnZVBIT3TQmy2Qy8Pv9Gc3j8XymE+WjCpzG9fV1ZLNZ1UCHw4GKiopji8qwN11dXV/1Sx0X
+        Py6cXfguDekmPU4gHeh4khGdzNxu97KsEe0ubqK/v/9ZPB5XjWP9Zr0nBROAqgQCgaf39AC0LHLo
+        c/WMC50n7DZL+J/JA1OK+Hy+x1eaB8Y4yjrHMWr8ggzSy5aWllgkEnkn8jhY4+FjUuUQvaGhYaO3
+        t/eBNHwqbCzijOW0pDiUZm9vD+3t7WOS3Skv76E8rkEJvC3KGFLaiMg6JQAfxKcYDodVjNWi4Y8A
+        AwBlnVrFCdcThQAAAABJRU5ErkJggg==
+    </icon>
+    <properties>
+        <property key="caption" type="string">
+            <caption>Caption</caption>
+            <category>Appearance</category>
+            <description>Caption</description>
+        </property>
+        <property key="type" type="enumeration" defaultValue="button">
+            <caption>Render as</caption>
+            <category>Appearance</category>
+            <description>Render as</description>
+            <enumerationValues>
+                <enumerationValue key="button">Button</enumerationValue>
+                <enumerationValue key="link">Link</enumerationValue>
+            </enumerationValues>
+        </property>
+        <property key="icon" type="image" required="false">
+            <caption>Image</caption>
+            <category>Appearance</category>
+            <description>Image</description>
+        </property>
+
+        <property key="onclickmf" type="microflow">
+            <caption>On click</caption>
+            <category>Events</category>
+            <description>On click</description>
+            <returnType type="Void"/>
+        </property>
+
+        <property key="category" type="string">
+            <caption>Category</caption>
+            <category>Behavior</category>
+            <description>Category</description>
+        </property>
+        <property key="evt" type="string">
+            <caption>Action</caption>
+            <category>Behavior</category>
+            <description>Action</description>
+        </property>
+        <property key="label" type="attribute" required="false">
+            <caption>Label</caption>
+            <category>Behavior</category>
+            <description>Label</description>
+            <attributeTypes>
+                <attributeType name="AutoNumber"/>
+                <attributeType name="Currency"/>
+                <attributeType name="Enum"/>
+                <attributeType name="Float"/>
+                <attributeType name="Integer"/>
+                <attributeType name="Long"/>
+                <attributeType name="String"/>
+            </attributeTypes>
+        </property>
+        <property key="value" type="attribute" required="false"> 
+            <caption>Value</caption>
+            <category>Behavior</category>
+            <description>Value</description>
+            <attributeTypes>
+                <attributeType name="AutoNumber"/>
+                <attributeType name="Integer"/>
+                <attributeType name="Long"/>
+            </attributeTypes>
+        </property>
+        <property key="addEvent" type="boolean" defaultValue="true">
+            <caption>Active</caption>
+            <category>Behavior</category>
+            <description>Enable/disable event tracking</description>
+        </property>
+        <property key="uaTrackCode" type="string" defaultValue="UA-">
+            <caption>UA-XXX-XX</caption>
+            <category>Behavior</category>
+            <description>The UA-XXX-XX code for including google analytics code inside the webpage.</description>
+        </property>
+    </properties>
+</widget>
