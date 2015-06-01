@@ -1,5 +1,5 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document, jQuery, ga, window */
+/*global mx, dojo, mxui, define, require, browser, devel, console, document, jQuery, ga, window */
 /*mendix */
 /*
     GoogleAnalytics
@@ -45,15 +45,18 @@ define([
         postCreate: function () {
             console.log(this.id + ".postCreate");
             this._insertGoogleAnalytics();
-            // Track it or not?
-            if (this.trackIt) {
-                this._addPage();
-            }
+            this.connect(this.mxform, "onNavigation", function() {
+                // Track it or not?
+                if (this.trackIt) {
+                    this._addPage();
+                }
+            });
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             console.log(this.id + ".update");
+            this._contextObj = obj;
             callback();
         },
 
@@ -71,7 +74,74 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-        _replaceTags: function(s) {
+        _replaceTags: function (s) {
+            var i;
+            var str = s;
+            for (i = 0; i < this.attributeList.length; i++) {
+                var toBeReplacedValue = "${" + this.attributeList[i].variableName + "}";
+                var replacementValue = this._getObjectAttr(this._contextObj, this.attributeList[i].attr, false);
+                str = str.replace(toBeReplacedValue, replacementValue);
+            }
+            return str;
+        },
+        _getObjectAttr: function (object, attr, renderValue) {
+            if (!object || !attr) {
+                return "";
+            }
+
+            if (attr.indexOf("/") === -1) {
+                if (renderValue) {
+                    return mx.parser && mx.parser.formatAttribute ? mx.parser.formatAttribute(object, attr) : mxui.html.renderValue(object, attr); //mxui.html.rendervalue moved in 5.~7.
+                }
+                return object.getAttribute(attr);
+            }
+            var parts = attr.split("/");
+            if (parts.length === 3) {
+                var child = object.get(parts[0]);
+
+                if (!child) {
+                    return "";
+                }
+
+                //Fine, we have an object
+                if (dojo.isObject(child)) {
+                    child = object.getChild(parts[0]); //Get child only works if child was not a guid but object
+                    return this._getObjectAttr(child, parts[2], renderValue);
+                }
+
+                //Try to retrieve guid in syc
+                else {
+                    //..but, there is a guid...
+                    var tmp = null;
+                    mx.processor.get({
+                        guid: child, noCache: false, callback: function (obj) { //async = false option would be nice!
+                            tmp = obj;
+                        }
+                    });
+                    if (tmp !== null) {//callback was invoked in sync :)
+                        return this._getObjectAttr(tmp, parts[2], renderValue);
+                    }
+
+                    //console && console.warn && console.warn("Commons.getObjectAttr failed to retrieve " + attr );
+                    //This happens if no retrieve schema was used :-(.
+                    return "";
+                }
+            }
+
+            //objects can be returned in X different ways, sometime just a guid, sometimes its an object...
+            if (parts.length === 2) {
+                var result = object.getAttribute(parts[0]); //incase of of a get object, return the GUIDs (but sometimes getAttribute gives the object...)
+                if (!result) {
+                    return "";
+                }
+                if (result.guid) {
+                    return result.guid;
+                }
+                if (/\d+/.test(result)) {
+                    return result;
+                }
+            }
+            throw "GridCommons.getObjectAttr: Failed to retrieve attribute '" + attr + "'";
 
         },
         _insertGoogleAnalytics: function () {
@@ -85,8 +155,8 @@ define([
         _addPage: function () {
             ga('send', {
                 'hitType': 'pageview',
-                'page': this.trackUrl,
-                'title': this.pageTitle
+                'page': this._replaceTags(this.trackUrl),
+                'title': this._replaceTags(this.pageTitle)
             });
         },
 
