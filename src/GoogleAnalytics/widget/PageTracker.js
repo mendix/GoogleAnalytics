@@ -71,11 +71,15 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
+        _replaceTags: function(s) {
 
+        },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-            ga('create', this.uaTrackCode, 'auto');
+            if (typeof window.mxGoogleAnalytics === "undefined") {
+                ga('create', this.uaTrackCode, 'auto');
+            }
         },
 
         _addPage: function () {

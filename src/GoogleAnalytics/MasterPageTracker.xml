@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="GoogleAnalytics.widget.PageTracker" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
-  <name>PageTracker</name>
+<widget id="GoogleAnalytics.widget.MasterPageTracker" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>MasterPageTracker</name>
   <description>The page tracker google analytics code.</description>
   <icon>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
@@ -19,20 +19,10 @@
         AQA+108un+UF/QAAAABJRU5ErkJggg==
     </icon>
     <properties>
-        <property key="trackUrl" type="string" defaultValue="/">
-            <caption>Url</caption>
-            <category>Behavior</category>
-            <description>Url to track</description>
-        </property>
-        <property key="pageTitle" type="string" defaultValue="">
-            <caption>Title</caption>
-            <category>Behavior</category>
-            <description>Title to track</description>
-        </property>
         <property key="uaTrackCode" type="string" defaultValue="UA-">
             <caption>UA-XXX-XX</caption>
             <category>Behavior</category>
-            <description>The UA-XXX-XX code for including google analytics code inside the webpage. NOTE: You DO NOT have to fill this value if you also use the MasterPageTracker widget</description>
+            <description>The UA-XXX-XX code for including google analytics code inside the webpage.</description>
         </property>
         <property key="trackIt" type="boolean" defaultValue="true">
             <caption>Active</caption>

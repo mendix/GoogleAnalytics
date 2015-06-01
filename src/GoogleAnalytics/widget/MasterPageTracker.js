@@ -5,10 +5,10 @@
     GoogleAnalytics
     ========================
 
-    @file      : GoogleAnalytics.js
+    @file      : MasterPageTracker.js
     @version   : 2.0.0
-    @author    : Gerhard Richard Edens
-    @date      : Wed, 20 May 2015 12:17:18 GMT
+    @author    : Ismail Habib Muhammad
+    @date      : 29 May 2015
     @copyright : Mendix b.v.
     @license   : Apache 2
 
@@ -19,11 +19,12 @@
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
-    "dojo/_base/declare", "mxui/widget/_Button", "dojo/_base/lang"
-], function (declare, _Button, lang) {
-    
+    "dojo/_base/declare", "mxui/widget/_WidgetBase"
+], function (declare, _WidgetBase) {
+    "use strict";
+
     // Declare widget"s prototype.
-    return declare("GoogleAnalytics.widget.EventTrackerButton", [_Button], {
+    return declare("GoogleAnalytics.widget.MasterPageTracker", [_WidgetBase], {
 
         // Parameters configured in the Modeler.
         mfToExecute: "",
@@ -43,17 +44,27 @@ define([
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             console.log(this.id + ".postCreate");
-            this._insertGoogleAnalytics();
-            this.inherited(arguments);
+            if (typeof window.mxGoogleAnalytics === "undefined") {
+                this._insertGoogleAnalytics();
+            }
+            this._setupGlobalTrackerId();
+
+            this.connect(this.mxform, "onNavigation", function() {
+                // Track it or not?
+                if (this.trackIt) {
+                    this._addPage();
+                }
+            });
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             console.log(this.id + ".update");
-            this._contextObj = obj;
             callback();
         },
-
+        _setupGlobalTrackerId: function () {
+            window.mxGoogleAnalytics = {trackerId: this.uaTrackCode};
+        },
         _addGoogle: function(i, s, o, g, r, a, m) {
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
@@ -77,37 +88,15 @@ define([
             }
         },
 
-        _addEvent: function () {
-            if(this.addEvent){
-                ga('send', 
-                   'event', 
-                   this.category, 
-                   this.action, 
-                   (this._contextObj !== null) ? this._contextObj.get(this.label) : "", 
-                   (this._contextObj !== null) ? this._contextObj.get(this.value) : "");
-            }
-        },
-
-        onClick: function () {
-            console.log(this.id + ".onClick");
-
-            var b = this.onclickmf,
-                a = this._contextObj,
-                self = this;
-            if (a) {
-                mx.data.action({
-                    actionname: b,
-                    guids: [a.getGuid()],
-                    callback: function (objs) {
-                        self._addEvent();
-                    },
-                    error: function () {
-                        console.error(this.id + ".click: Microflow invocation failed");
-                    }
-                });
-            } else {
-                console.error(this.id + ".click: no object in context");
-            }
+        _addPage: function () {
+            var pageExtension = '.page.xml';
+            var oriPath = this.mxform.path;
+            var path = oriPath.substr(0, oriPath.length - pageExtension.length);
+            ga('send', {
+                'hitType': 'pageview',
+                'page': path,
+                'title': this.mxform.title
+            });
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
@@ -117,6 +106,6 @@ define([
 
     });
 });
-require(["GoogleAnalytics/widget/EventTrackerButton"], function () {
+require(["GoogleAnalytics/widget/PageTracker"], function () {
     "use strict";
 });
