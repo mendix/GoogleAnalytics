@@ -2,20 +2,20 @@
 /*global mx, dojo, mxui, define, require, browser, devel, console, document, jQuery, ga, window */
 /*mendix */
 /*
-    GoogleAnalytics
-    ========================
+ GoogleAnalytics
+ ========================
 
-    @file      : GoogleAnalytics.js
-    @version   : 2.0.0
-    @author    : Gerhard Richard Edens
-    @date      : Wed, 20 May 2015 12:17:18 GMT
-    @copyright : Mendix b.v.
-    @license   : Apache 2
+ @file      : PageTracker.js
+ @version   : 2.1.0
+ @author    : Gerhard Richard Edens, Ismail Habib Muhammad
+ @date      : Wed, 2 June 2015
+ @copyright : Mendix b.v.
+ @license   : Apache 2
 
-    Documentation
-    ========================
-    Describe your widget here.
-*/
+ Documentation
+ ========================
+ Describe your widget here.
+ */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
@@ -45,7 +45,7 @@ define([
         postCreate: function () {
             console.log(this.id + ".postCreate");
             this._insertGoogleAnalytics();
-            this.connect(this.mxform, "onNavigation", function() {
+            this.connect(this.mxform, "onNavigation", function () {
                 // Track it or not?
                 if (this.trackIt) {
                     this._addPage();
@@ -60,7 +60,7 @@ define([
             callback();
         },
 
-        _addGoogle: function(i, s, o, g, r, a, m) {
+        _addGoogle: function (i, s, o, g, r, a, m) {
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
                 i[r] = i[r] || function () {
@@ -91,7 +91,7 @@ define([
             if (this.attributeList.length === 0) {
                 callback(s);
             } else {
-                this._replaceTagsRecursive(s, 0, function(str) {
+                this._replaceTagsRecursive(s, 0, function (str) {
                     callback(str);
                 });
             }
