@@ -19,8 +19,8 @@
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
-    "dojo/_base/declare", "mxui/widget/_WidgetBase"
-], function (declare, _WidgetBase) {
+    "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
+], function (declare, _WidgetBase, lang) {
     "use strict";
 
     // Declare widget"s prototype.
@@ -74,75 +74,27 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-        _replaceTags: function (s) {
-            var i;
-            var str = s;
-            for (i = 0; i < this.attributeList.length; i++) {
-                var toBeReplacedValue = "${" + this.attributeList[i].variableName + "}";
-                var replacementValue = this._getObjectAttr(this._contextObj, this.attributeList[i].attr, false);
-                str = str.replace(toBeReplacedValue, replacementValue);
-            }
-            return str;
-        },
-        _getObjectAttr: function (object, attr, renderValue) {
-            if (!object || !attr) {
-                return "";
-            }
-
-            if (attr.indexOf("/") === -1) {
-                if (renderValue) {
-                    return mx.parser && mx.parser.formatAttribute ? mx.parser.formatAttribute(object, attr) : mxui.html.renderValue(object, attr); //mxui.html.rendervalue moved in 5.~7.
-                }
-                return object.getAttribute(attr);
-            }
-            var parts = attr.split("/");
-            if (parts.length === 3) {
-                var child = object.get(parts[0]);
-
-                if (!child) {
-                    return "";
-                }
-
-                //Fine, we have an object
-                if (dojo.isObject(child)) {
-                    child = object.getChild(parts[0]); //Get child only works if child was not a guid but object
-                    return this._getObjectAttr(child, parts[2], renderValue);
-                }
-
-                //Try to retrieve guid in syc
-                else {
-                    //..but, there is a guid...
-                    var tmp = null;
-                    mx.processor.get({
-                        guid: child, noCache: false, callback: function (obj) { //async = false option would be nice!
-                            tmp = obj;
-                        }
-                    });
-                    if (tmp !== null) {//callback was invoked in sync :)
-                        return this._getObjectAttr(tmp, parts[2], renderValue);
+        _replaceTagsRecursive: function (s, iterator, callback) {
+            var toBeReplacedValue = "${" + this.attributeList[iterator].variableName + "}";
+            this._contextObj.fetch(this.attributeList[iterator].attr, lang.hitch(this, function (value) {
+                    var str = s.replace(toBeReplacedValue, value);
+                    iterator++;
+                    if (iterator < this.attributeList.length) {
+                        lang.hitch(this, this._replaceTagsRecursive(str, iterator, callback));
+                    } else {
+                        lang.hitch(this, callback(str));
                     }
-
-                    //console && console.warn && console.warn("Commons.getObjectAttr failed to retrieve " + attr );
-                    //This happens if no retrieve schema was used :-(.
-                    return "";
-                }
+                })
+            );
+        },
+        _replaceTags: function (s, callback) {
+            if (this.attributeList.length === 0) {
+                callback(s);
+            } else {
+                this._replaceTagsRecursive(s, 0, function(str) {
+                    callback(str);
+                });
             }
-
-            //objects can be returned in X different ways, sometime just a guid, sometimes its an object...
-            if (parts.length === 2) {
-                var result = object.getAttribute(parts[0]); //incase of of a get object, return the GUIDs (but sometimes getAttribute gives the object...)
-                if (!result) {
-                    return "";
-                }
-                if (result.guid) {
-                    return result.guid;
-                }
-                if (/\d+/.test(result)) {
-                    return result;
-                }
-            }
-            throw "GridCommons.getObjectAttr: Failed to retrieve attribute '" + attr + "'";
-
         },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
@@ -153,11 +105,16 @@ define([
         },
 
         _addPage: function () {
-            ga('send', {
-                'hitType': 'pageview',
-                'page': this._replaceTags(this.trackUrl),
-                'title': this._replaceTags(this.pageTitle)
-            });
+            this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
+                    this._replaceTags(this.pageTitle, function (newPageTitle) {
+                        ga('send', {
+                            'hitType': 'pageview',
+                            'page': newTrackUrl,
+                            'title': newPageTitle
+                        });
+                    });
+                })
+            );
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
