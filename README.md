@@ -1,6 +1,6 @@
-# Google Analytics Custim Widget
+# Google Analytics Custom Widget
 
-With this widget you are a able to add Google Analytics Page Tracking and Event Tracking inside a Mendix application.
+With this widget you are a able to add Google Analytics Page Tracking (for master layout and specific page) and Event Tracking inside a Mendix application.
 
 ## Contributing
 
