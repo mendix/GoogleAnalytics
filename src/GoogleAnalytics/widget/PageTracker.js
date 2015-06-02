@@ -74,27 +74,23 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-        _replaceTagsRecursive: function (s, iterator, callback) {
-            var toBeReplacedValue = "${" + this.attributeList[iterator].variableName + "}";
-            this._contextObj.fetch(this.attributeList[iterator].attr, lang.hitch(this, function (value) {
-                    var str = s.replace(toBeReplacedValue, value);
-                    iterator++;
-                    if (iterator < this.attributeList.length) {
-                        lang.hitch(this, this._replaceTagsRecursive(str, iterator, callback));
-                    } else {
-                        lang.hitch(this, callback(str));
-                    }
-                })
-            );
+        _replaceTagsRecursive: function (s, attrs, callback) {
+            var attr = attrs.pop();
+            if (attr === undefined) {
+                lang.hitch(this, callback(s));
+            } else {
+                var toBeReplacedValue = "${" + attr.variableName + "}";
+                this._contextObj.fetch(attr.attr, lang.hitch(this, function (value) {
+                        var str = s.replace(toBeReplacedValue, value);
+                        lang.hitch(this, this._replaceTagsRecursive(str, attrs, callback));
+                    })
+                );
+            }
         },
         _replaceTags: function (s, callback) {
-            if (this.attributeList.length === 0) {
-                callback(s);
-            } else {
-                this._replaceTagsRecursive(s, 0, function (str) {
-                    callback(str);
-                });
-            }
+            this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
+                callback(str);
+            });
         },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
@@ -103,7 +99,6 @@ define([
                 ga('create', this.uaTrackCode, 'auto');
             }
         },
-
         _addPage: function () {
             this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
                     this._replaceTags(this.pageTitle, function (newPageTitle) {
