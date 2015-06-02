@@ -1,26 +1,26 @@
 /*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document, jQuery, ga, window */
+/*global mx, dojo, mxui, define, require, browser, devel, console, document, jQuery, ga, window */
 /*mendix */
 /*
-    GoogleAnalytics
-    ========================
+ GoogleAnalytics
+ ========================
 
-    @file      : GoogleAnalytics.js
-    @version   : 2.0.0
-    @author    : Gerhard Richard Edens
-    @date      : Wed, 20 May 2015 12:17:18 GMT
-    @copyright : Mendix b.v.
-    @license   : Apache 2
+ @file      : PageTracker.js
+ @version   : 2.1.0
+ @author    : Gerhard Richard Edens, Ismail Habib Muhammad
+ @date      : Wed, 2 June 2015
+ @copyright : Mendix b.v.
+ @license   : Apache 2
 
-    Documentation
-    ========================
-    Describe your widget here.
-*/
+ Documentation
+ ========================
+ Describe your widget here.
+ */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
-    "dojo/_base/declare", "mxui/widget/_WidgetBase"
-], function (declare, _WidgetBase) {
+    "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
+], function (declare, _WidgetBase, lang) {
     "use strict";
 
     // Declare widget"s prototype.
@@ -45,19 +45,22 @@ define([
         postCreate: function () {
             console.log(this.id + ".postCreate");
             this._insertGoogleAnalytics();
-            // Track it or not?
-            if (this.trackIt) {
-                this._addPage();
-            }
+            this.connect(this.mxform, "onNavigation", function () {
+                // Track it or not?
+                if (this.trackIt) {
+                    this._addPage();
+                }
+            });
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             console.log(this.id + ".update");
+            this._contextObj = obj;
             callback();
         },
 
-        _addGoogle: function(i, s, o, g, r, a, m) {
+        _addGoogle: function (i, s, o, g, r, a, m) {
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
                 i[r] = i[r] || function () {
@@ -71,19 +74,42 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-
+        _replaceTagsRecursive: function (s, attrs, callback) {
+            var attr = attrs.pop();
+            if (attr === undefined) {
+                lang.hitch(this, callback(s));
+            } else {
+                var toBeReplacedValue = "${" + attr.variableName + "}";
+                this._contextObj.fetch(attr.attr, lang.hitch(this, function (value) {
+                        var str = s.replace(toBeReplacedValue, value);
+                        lang.hitch(this, this._replaceTagsRecursive(str, attrs, callback));
+                    })
+                );
+            }
+        },
+        _replaceTags: function (s, callback) {
+            this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
+                callback(str);
+            });
+        },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
-            ga('create', this.uaTrackCode, 'auto');
+            if (typeof window.mxGoogleAnalytics === "undefined") {
+                ga('create', this.uaTrackCode, 'auto');
+            }
         },
-
         _addPage: function () {
-            ga('send', {
-                'hitType': 'pageview',
-                'page': this.trackUrl,
-                'title': this.pageTitle
-            });
+            this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
+                    this._replaceTags(this.pageTitle, function (newPageTitle) {
+                        ga('send', {
+                            'hitType': 'pageview',
+                            'page': newTrackUrl,
+                            'title': newPageTitle
+                        });
+                    });
+                })
+            );
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
