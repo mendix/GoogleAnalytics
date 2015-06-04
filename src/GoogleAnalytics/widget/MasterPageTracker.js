@@ -92,6 +92,9 @@ define([
             var pageExtension = '.page.xml';
             var oriPath = this.mxform.path;
             var path = oriPath.substr(0, oriPath.length - pageExtension.length);
+            if (typeof this.prefix !== "undefined" && this.prefix !== "") {
+                path = this.prefix + "/" + path;
+            }
             ga('send', {
                 'hitType': 'pageview',
                 'page': path,

@@ -24,6 +24,11 @@
             <category>Behavior</category>
             <description>The UA-XXX-XX code for including google analytics code inside the webpage.</description>
         </property>
+        <property key="prefix" type="string" defaultValue="" required="false">
+            <caption>URL prefix</caption>
+            <category>Behavior</category>
+            <description>The prefix that you want to be displayed in the Google Analytics. It is especially useful if you are using this widget in different apps while using the same tracked code (UA-XX-XXX)</description>
+        </property>
         <property key="trackIt" type="boolean" defaultValue="true">
             <caption>Active</caption>
             <category>Behavior</category>
