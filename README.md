@@ -28,8 +28,7 @@ All widgets in this package (except for the EventTrackerButton) should be placed
 ### EventTracker
 
 * *Category*: The name you supply for the group of objects you want to track.
-* *Action*: A string that is uniquely paired with each category, and commonly used to define the type of user interaction for the web object
-
+* * *Action*: A string that is uniquely paired with each category, and commonly used to define the type of user interaction for the web object.
 * *Label*: An optional string to provide additional dimensions to the event data.
 * *Value*: An integer that you can use to provide numerical data about the user even
  
@@ -56,7 +55,10 @@ So that the webmaster tools can be activated and help with SEO on Mendix applica
 
 
 ## Upgrading from 1.1 to 2.0
-- You can remove the line <code><script type="text/javascript" src="widgets/analytics/lib/Tracker.js" uanumber="UA-XXXXXXXX-X"></script></code> from your index.html
+- You can remove the following line from your index.html
+```html 
+<script type="text/javascript" src="widgets/analytics/lib/Tracker.js" uanumber="UA-XXXXXXXX-X"></script>
+```
 - Remove Analytics.mpk from your [%projectdir%]/widgets directory.
 
 
