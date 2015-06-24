@@ -19,8 +19,8 @@
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define([
-    "dojo/_base/declare", "mxui/widget/_WidgetBase"
-], function (declare, _WidgetBase) {
+    "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
+], function (declare, _WidgetBase, lang) {
     "use strict";
 
     // Declare widget"s prototype.
@@ -35,6 +35,7 @@ define([
         _handles: null,
         _contextObj: null,
         _alertDiv: null,
+        _initialized: false,
 
         // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
         constructor: function () {
@@ -44,22 +45,26 @@ define([
         // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
             console.log(this.id + ".postCreate");
-            if (typeof window.mxGoogleAnalytics === "undefined") {
-                this._insertGoogleAnalytics();
-            }
-            this._setupGlobalTrackerId();
-
-            this.connect(this.mxform, "onNavigation", function() {
-                // Track it or not?
-                if (this.trackIt) {
-                    this._addPage();
-                }
-            });
         },
 
         // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
             console.log(this.id + ".update");
+            this._contextObj = obj;
+            if (!this._initialized) {
+                if (typeof window.mxGoogleAnalytics === "undefined") {
+                    this._insertGoogleAnalytics();
+                }
+                this._setupGlobalTrackerId();
+
+                this.connect(this.mxform, "onNavigation", function() {
+                    // Track it or not?
+                    if (this.trackIt) {
+                        this._addPage();
+                    }
+                });
+                this._initialized = true;
+            }
             callback();
         },
         _setupGlobalTrackerId: function () {
@@ -79,12 +84,31 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-
+        _replaceTagsRecursive: function (s, attrs, callback) {
+            var attr = attrs.pop();
+            if (attr === undefined) {
+                lang.hitch(this, callback(s));
+            } else {
+                var toBeReplacedValue = "${" + attr.variableName + "}";
+                this._contextObj.fetch(attr.attr, lang.hitch(this, function (value) {
+                        var str = s.replace(toBeReplacedValue, value);
+                        lang.hitch(this, this._replaceTagsRecursive(str, attrs, callback));
+                    })
+                );
+            }
+        },
+        _replaceTags: function (s, callback) {
+            this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
+                callback(str);
+            });
+        },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
-                ga('create', this.uaTrackCode, 'auto');
+                this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
+                    ga('create', text, 'auto');
+                }));
             }
         },
 
@@ -109,6 +133,6 @@ define([
 
     });
 });
-require(["GoogleAnalytics/widget/PageTracker"], function () {
+require(["GoogleAnalytics/widget/MasterPageTracker"], function () {
     "use strict";
 });
