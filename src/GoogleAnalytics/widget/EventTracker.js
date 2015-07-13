@@ -18,7 +18,7 @@
 */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-define([
+define("GoogleAnalytics/widget/EventTracker", [
     "dojo/_base/declare", "mxui/widget/_WidgetBase"
 ], function (declare, _WidgetBase) {
     "use strict";

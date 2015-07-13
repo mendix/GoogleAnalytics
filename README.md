@@ -35,13 +35,26 @@ All widgets in this package (except for the EventTrackerButton) should be placed
 (see http://code.google.com/apis/analytics/docs/tracking/eventTrackerGuide.html for more information)
 
 ### EventTrackerButton
+
 This widget combines the built-in microflow trigger with the EventTracker. Inspect widget properties for details.
+
+### MasterPageTracker
+
+Typically you would want to start by using the MasterPageTracker by adding this widget to your master layout. By doing this, all pages in your Mendix application will be tracked by Google Analytics. You will need to provide the widget with the tracker ID (UA-XXX-XX) that you should receive when configuring your Google Analytics account. The Master Page Tracker widget will use the combination of module name and page name in Mendix as url to be reported to Google Analytics (e.g. a page in X module which is named Y will be registered as /X/Y in Google Analytics. Note: you can also define a prefix for the url).
+
+By having a MasterPageTracker widget in the master layout, you don't need to define the tracker ID (UA-XXX-XX) in each of the (Advanced)PageTracker anymore since they will use the one from MasterPageTracker.
+
+Note: MasterPageTracker should only be used one in your Mendix application.
+
+### AdvancedPageTracker
+
+* *Url*: The url which should be shown in the Google Analytics overview.
+* *Title*: The title which should be shown in the Google Analytics overview.
+* *Example*: if url is '/test/${name}', then if the url is parsed, '${name}' will be replaced by the value of current object's attribute which is defined in the Data source tab. Warning: The widget must be inside a DataView.
 
 ### PageTracker
 
-* *Url*: The url which should be shown in the Google Analytics overview
-* *Parse url*: Determines if words preceding a dollar sign '$' are replaced by the value of the corresponding attribute.
-* *Example*: if url is '/test/$name', then if the url is parsed, '$name' will be replaced by the value of current object's 'name' attribute. Warning: if 'parse url' is set to true, the widget must be inside a DataView. No consistency checks are applied to the url, so if the attribute does not exist, or its value is empty, the page will not be tracked.
+It is exactly the same as AdvancedPageTracker but without the ability to use object's attribute value to build url/title. Consequently there is no need to have the widget inside a DataView.
 
 ### Webmaster tools
 
@@ -62,3 +75,4 @@ So that the webmaster tools can be activated and help with SEO on Mendix applica
 - Remove Analytics.mpk from your [%projectdir%]/widgets directory.
 
 
+>>>>>>> b2964df6e963f3a4c797cc280f9111a37e8ebce5

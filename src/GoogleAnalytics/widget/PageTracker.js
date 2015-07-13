@@ -18,7 +18,7 @@
  */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-define([
+define("GoogleAnalytics/widget/PageTracker", [
     "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
 ], function (declare, _WidgetBase, lang) {
     "use strict";
@@ -74,24 +74,6 @@ define([
                 m.parentNode.insertBefore(a, m);
             }
         },
-        _replaceTagsRecursive: function (s, attrs, callback) {
-            var attr = attrs.pop();
-            if (attr === undefined) {
-                lang.hitch(this, callback(s));
-            } else {
-                var toBeReplacedValue = "${" + attr.variableName + "}";
-                this._contextObj.fetch(attr.attr, lang.hitch(this, function (value) {
-                        var str = s.replace(toBeReplacedValue, value);
-                        lang.hitch(this, this._replaceTagsRecursive(str, attrs, callback));
-                    })
-                );
-            }
-        },
-        _replaceTags: function (s, callback) {
-            this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
-                callback(str);
-            });
-        },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
@@ -100,16 +82,11 @@ define([
             }
         },
         _addPage: function () {
-            this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
-                    this._replaceTags(this.pageTitle, function (newPageTitle) {
-                        ga('send', {
-                            'hitType': 'pageview',
-                            'page': newTrackUrl,
-                            'title': newPageTitle
-                        });
-                    });
-                })
-            );
+            ga('send', {
+                'hitType': 'pageview',
+                'page': this.trackUrl,
+                'title': this.pageTitle
+            });
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
