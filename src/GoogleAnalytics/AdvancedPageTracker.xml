@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<widget id="GoogleAnalytics.widget.PageTracker" needsEntityContext="false" xmlns="http://www.mendix.com/widget/1.0/">
-  <name>PageTracker</name>
-  <description>The page tracker google analytics code.</description>
+<widget id="GoogleAnalytics.widget.AdvancedPageTracker" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>AdvancedPageTracker</name>
+  <description>The advanced page tracker google analytics code.</description>
   <icon>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
         bWFnZVJlYWR5ccllPAAAAp1JREFUeNp0U99LU2EYfnY8bs61qZs/Bg5GRkwJO5jG8MbAURHURRdC
@@ -19,6 +19,33 @@
         AQA+108un+UF/QAAAABJRU5ErkJggg==
     </icon>
     <properties>
+        <property key="attributeList" type="object" isList="true" required="false">
+            <caption>Attributes</caption>
+            <category>Data source</category>
+            <description></description>
+            <properties>
+                <property key="variableName" type="string" required="true">
+                    <caption>Variable name</caption>
+                    <category>Data source</category>
+                    <description>Identifies the attribute value, this name should be used in 'Display string' property.</description>
+                </property>
+                <property key="attr" type="attribute" allowNonPersistableEntities="true" isPath="optional" pathType="reference">
+                    <caption>Attribute</caption>
+                    <category>Data source</category>
+                    <description>Value of this attribute will be used to replace ${your_Variable_Name}, defined in 'Url' property</description>
+                    <attributeTypes>
+                        <attributeType name="AutoNumber"/>
+                        <attributeType name="String" />
+                        <attributeType name="Enum"/>
+                        <attributeType name="Integer"/>
+                        <attributeType name="Float"/>
+                        <attributeType name="Long"/>
+                        <attributeType name="DateTime"/>
+                        <attributeType name="Currency"/>
+                    </attributeTypes>
+                </property>
+            </properties>
+        </property>
         <property key="trackUrl" type="string" defaultValue="/">
             <caption>Url</caption>
             <category>Behavior</category>

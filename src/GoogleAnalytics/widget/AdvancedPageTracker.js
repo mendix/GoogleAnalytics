@@ -5,7 +5,7 @@
  GoogleAnalytics
  ========================
 
- @file      : PageTracker.js
+ @file      : AdvancedPageTracker.js
  @version   : 2.1.0
  @author    : Gerhard Richard Edens, Ismail Habib Muhammad
  @date      : Wed, 2 June 2015
@@ -18,13 +18,13 @@
  */
 
 // Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
-define("GoogleAnalytics/widget/PageTracker", [
+define("GoogleAnalytics/widget/AdvancedPageTracker", [
     "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
 ], function (declare, _WidgetBase, lang) {
     "use strict";
 
     // Declare widget"s prototype.
-    return declare("GoogleAnalytics.widget.PageTracker", [_WidgetBase], {
+    return declare("GoogleAnalytics.widget.AdvancedPageTracker", [_WidgetBase], {
 
         // Parameters configured in the Modeler.
         mfToExecute: "",
@@ -74,6 +74,24 @@ define("GoogleAnalytics/widget/PageTracker", [
                 m.parentNode.insertBefore(a, m);
             }
         },
+        _replaceTagsRecursive: function (s, attrs, callback) {
+            var attr = attrs.pop();
+            if (attr === undefined) {
+                lang.hitch(this, callback(s));
+            } else {
+                var toBeReplacedValue = "${" + attr.variableName + "}";
+                this._contextObj.fetch(attr.attr, lang.hitch(this, function (value) {
+                        var str = s.replace(toBeReplacedValue, value);
+                        lang.hitch(this, this._replaceTagsRecursive(str, attrs, callback));
+                    })
+                );
+            }
+        },
+        _replaceTags: function (s, callback) {
+            this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
+                callback(str);
+            });
+        },
         _insertGoogleAnalytics: function () {
             this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
 
@@ -82,11 +100,16 @@ define("GoogleAnalytics/widget/PageTracker", [
             }
         },
         _addPage: function () {
-            ga('send', {
-                'hitType': 'pageview',
-                'page': this.trackUrl,
-                'title': this.pageTitle
-            });
+            this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
+                    this._replaceTags(this.pageTitle, function (newPageTitle) {
+                        ga('send', {
+                            'hitType': 'pageview',
+                            'page': newTrackUrl,
+                            'title': newPageTitle
+                        });
+                    });
+                })
+            );
         },
 
         // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
@@ -96,6 +119,6 @@ define("GoogleAnalytics/widget/PageTracker", [
 
     });
 });
-require(["GoogleAnalytics/widget/PageTracker"], function () {
+require(["GoogleAnalytics/widget/AdvancedPageTracker"], function () {
     "use strict";
 });

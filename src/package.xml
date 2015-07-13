@@ -4,6 +4,7 @@
 		<widgetFiles>
             <widgetFile path="GoogleAnalytics/MasterPageTracker.xml"/>
 			<widgetFile path="GoogleAnalytics/PageTracker.xml"/>
+            <widgetFile path="GoogleAnalytics/AdvancedPageTracker.xml"/>
 			<widgetFile path="GoogleAnalytics/WebmasterTools.xml"/>
 			<widgetFile path="GoogleAnalytics/EventTracker.xml"/>
 			<widgetFile path="GoogleAnalytics/EventTrackerButton.xml"/>
