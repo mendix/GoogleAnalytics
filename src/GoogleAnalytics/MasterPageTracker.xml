@@ -34,6 +34,19 @@
             <category>Behavior</category>
             <description>Enable/disable tracking</description>
         </property>
+		<property key="useridAttr" type="attribute" required="false" allowNonPersistableEntities="true" isPath="optional" pathType="reference">
+            <caption>User ID attribute</caption>
+            <category>Data source</category>
+            <description>The value of this attribute will be used to uniquely identify the user in your Google Analytics.</description>
+            <attributeTypes>
+                <attributeType name="String" />
+            </attributeTypes>
+        </property>
+		<property key="userIdDimension" type="integer" defaultValue="0">
+            <caption>User ID dimension</caption>
+            <category>Data source</category>
+            <description>This value will be used to map the user to a custom dimension in your Google Analytics.</description>
+        </property>
         <property key="attributeList" type="object" isList="true" required="false">
             <caption>Attributes</caption>
             <category>Data source</category>

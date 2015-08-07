@@ -26,11 +26,6 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
     // Declare widget"s prototype.
     return declare("GoogleAnalytics.widget.MasterPageTracker", [_WidgetBase], {
 
-        // Parameters configured in the Modeler.
-        mfToExecute: "",
-        messageString: "",
-        backgroundColor: "",
-
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _handles: null,
         _contextObj: null,
@@ -107,7 +102,21 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
-                    ga('create', text, 'auto');
+					var opts = { 'cookieDomain': 'auto' };
+					
+					if (this.useridAttr != '') {
+						var uid = this._contextObj.get(this.useridAttr);
+						opts.userId = uid;
+						ga('create', text, opts);
+						ga('set', '&uid', uid);
+						
+						if (this.userIdDimension > 0)
+							ga('set', 'dimension'+this.userIdDimension, uid);
+						
+					} else {
+						ga('create', text, opts);
+					}
+					
                 }));
             }
         },
