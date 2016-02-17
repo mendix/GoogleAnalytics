@@ -1,23 +1,3 @@
-/*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document, jQuery, ga, window */
-/*mendix */
-/*
-    GoogleAnalytics
-    ========================
-
-    @file      : MasterPageTracker.js
-    @version   : 2.0.0
-    @author    : Ismail Habib Muhammad
-    @date      : 29 May 2015
-    @copyright : Mendix b.v.
-    @license   : Apache 2
-
-    Documentation
-    ========================
-    Describe your widget here.
-*/
-
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define("GoogleAnalytics/widget/MasterPageTracker", [
     "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
 ], function (declare, _WidgetBase, lang) {
@@ -27,24 +7,15 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
     return declare("GoogleAnalytics.widget.MasterPageTracker", [_WidgetBase], {
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
-        _handles: null,
         _contextObj: null,
-        _alertDiv: null,
         _initialized: false,
 
-        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
-        constructor: function () {
-            this._handles = [];
-        },
-
-        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            logger.debug(this.id + ".postCreate");
         },
 
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + ".update");
+            logger.debug(this.id + ".update");
             this._contextObj = obj;
             if (!this._initialized) {
                 if (typeof window.mxGoogleAnalytics === "undefined") {
@@ -62,10 +33,14 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
             }
             callback();
         },
+
         _setupGlobalTrackerId: function () {
+            logger.debug(this.id + "._setupGlobalTrackerId");
             window.mxGoogleAnalytics = {trackerId: this.uaTrackCode};
         },
+
         _addGoogle: function(i, s, o, g, r, a, m) {
+            logger.debug(this.id + "._addGoogle");
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
                 i[r] = i[r] || function () {
@@ -79,7 +54,9 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
                 m.parentNode.insertBefore(a, m);
             }
         },
+
         _replaceTagsRecursive: function (s, attrs, callback) {
+            logger.debug(this.id + "._replaceTagsRecursive");
             var attr = attrs.pop();
             if (attr === undefined) {
                 lang.hitch(this, callback(s));
@@ -92,56 +69,57 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
                 );
             }
         },
+
         _replaceTags: function (s, callback) {
+            logger.debug(this.id + "._replaceTags");
             this._replaceTagsRecursive(s, this.attributeList.slice(), function (str) {
                 callback(str);
             });
         },
+
         _insertGoogleAnalytics: function () {
-            this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            logger.debug(this.id + "._insertGoogleAnalytics");
+            this._addGoogle(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
-					var opts = { 'cookieDomain': 'auto' };
-					
-					if (this.useridAttr != '') {
-						var uid = this._contextObj.get(this.useridAttr);
-						opts.userId = uid;
-						ga('create', text, opts);
-						ga('set', '&uid', uid);
-						
-						if (this.userIdDimension > 0)
-							ga('set', 'dimension'+this.userIdDimension, uid);
-						
-					} else {
-						ga('create', text, opts);
-					}
-					
+                    var opts = { "cookieDomain": "auto" };
+
+                    if (this.useridAttr !== "") {
+                        var uid = this._contextObj.get(this.useridAttr);
+                        opts.userId = uid;
+                        ga("create", text, opts);
+                        ga("set", "&uid", uid);
+
+                        if (this.userIdDimension > 0)
+                            ga("set", "dimension"+this.userIdDimension, uid);
+
+                    } else {
+                        ga("create", text, opts);
+                    }
+
                 }));
             }
         },
 
         _addPage: function () {
-            var pageExtension = '.page.xml';
+            logger.debug(this.id + "._addPage");
+            var pageExtension = ".page.xml";
             var oriPath = this.mxform.path;
             var path = oriPath.substr(0, oriPath.length - pageExtension.length);
             if (typeof this.prefix !== "undefined" && this.prefix !== "") {
                 path = this.prefix + "/" + path;
             }
-            ga('send', {
-                'hitType': 'pageview',
-                'page': path,
-                'title': this.mxform.title
+            ga("send", {
+                "hitType": "pageview",
+                "page": path,
+                "title": this.mxform.title
             });
-        },
-
-        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
-        uninitialize: function () {
-            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         }
 
     });
 });
+
 require(["GoogleAnalytics/widget/MasterPageTracker"], function () {
     "use strict";
 });

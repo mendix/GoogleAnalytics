@@ -1,23 +1,3 @@
-/*jslint white:true, nomen: true, plusplus: true */
-/*global mx, define, require, browser, devel, console, document, jQuery, ga, window */
-/*mendix */
-/*
-    GoogleAnalytics
-    ========================
-
-    @file      : GoogleAnalytics.js
-    @version   : 2.0.0
-    @author    : Gerhard Richard Edens
-    @date      : Wed, 20 May 2015 12:17:18 GMT
-    @copyright : Mendix b.v.
-    @license   : Apache 2
-
-    Documentation
-    ========================
-    Describe your widget here.
-*/
-
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define("GoogleAnalytics/widget/EventTrackerButton", [
     "dojo/_base/declare", "mxui/widget/_Button", "dojo/_base/lang"
 ], function (declare, _Button, lang) {
@@ -25,36 +5,23 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
     // Declare widget"s prototype.
     return declare("GoogleAnalytics.widget.EventTrackerButton", [_Button], {
 
-        // Parameters configured in the Modeler.
-        mfToExecute: "",
-        messageString: "",
-        backgroundColor: "",
-
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
-        _handles: null,
         _contextObj: null,
-        _alertDiv: null,
 
-        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
-        constructor: function () {
-            this._handles = [];
-        },
-
-        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            logger.debug(this.id + ".postCreate");
             this._insertGoogleAnalytics();
             this.inherited(arguments);
         },
 
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + ".update");
+            logger.debug(this.id + ".update");
             this._contextObj = obj;
             callback();
         },
 
         _addGoogle: function(i, s, o, g, r, a, m) {
+            logger.debug(this.id + "._addGoogle");
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
                 i[r] = i[r] || function () {
@@ -70,17 +37,19 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
         },
 
         _insertGoogleAnalytics: function () {
-            this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            logger.debug(this.id + "._insertGoogleAnalytics");
+            this._addGoogle(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
-                ga('create', this.uaTrackCode, 'auto');
+                ga("create", this.uaTrackCode, "auto");
             }
         },
 
         _addEvent: function () {
-            if(this.addEvent){
-                ga('send',
-                   'event',
+            logger.debug(this.id + "._addEvent");
+            if (this.addEvent) {
+                ga("send",
+                   "event",
                    this.category,
                    this.action,
                    (this._contextObj !== null) ? this._contextObj.get(this.label) : "",
@@ -89,24 +58,21 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
         },
 
         onClick: function () {
-            console.log(this.id + ".onClick");
+            logger.debug(this.id + ".onClick");
 
-            var b = this.onclickmf,
-                a = this._contextObj,
-                self = this;
-            if (a) {
+            if (this._contextObj) {
                 mx.data.action({
                     params       : {
-                        actionname : b,
+                        actionname  : this.onclickmf,
                         applyto     : "selection",
-                        guids       : [a.getGuid()]
+                        guids       : [this._contextObj.getGuid()]
                     },
                     store: {
                         caller: this.mxform
                     },
-                    callback: function (objs) {
-                        self._addEvent();
-                    },
+                    callback: lang.hitch(this, function (objs) {
+                        this._addEvent();
+                    }),
                     error: function () {
                         console.error(this.id + ".click: Microflow invocation failed");
                     }
@@ -114,15 +80,11 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
             } else {
                 console.error(this.id + ".click: no object in context");
             }
-        },
-
-        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
-        uninitialize: function () {
-            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
         }
 
     });
 });
+
 require(["GoogleAnalytics/widget/EventTrackerButton"], function () {
     "use strict";
 });

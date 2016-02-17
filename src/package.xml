@@ -1,16 +1,16 @@
-<?xml version="1.0" encoding="utf-8" ?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://www.mendix.com/package/1.0/">
-	<clientModule name="GoogleAnalytics" version="2.0.0" xmlns="http://www.mendix.com/clientModule/1.0/">
-		<widgetFiles>
+    <clientModule name="GoogleAnalytics" version="3.2.0" xmlns="http://www.mendix.com/clientModule/1.0/">
+        <widgetFiles>
             <widgetFile path="GoogleAnalytics/MasterPageTracker.xml"/>
-			<widgetFile path="GoogleAnalytics/PageTracker.xml"/>
+            <widgetFile path="GoogleAnalytics/PageTracker.xml"/>
             <widgetFile path="GoogleAnalytics/AdvancedPageTracker.xml"/>
-			<widgetFile path="GoogleAnalytics/WebmasterTools.xml"/>
-			<widgetFile path="GoogleAnalytics/EventTracker.xml"/>
-			<widgetFile path="GoogleAnalytics/EventTrackerButton.xml"/>
-		</widgetFiles>
-		<files>
-			<file path="GoogleAnalytics/widget/"/>
-		</files>
-	</clientModule>
+            <widgetFile path="GoogleAnalytics/WebmasterTools.xml"/>
+            <widgetFile path="GoogleAnalytics/EventTracker.xml"/>
+            <widgetFile path="GoogleAnalytics/EventTrackerButton.xml"/>
+        </widgetFiles>
+        <files>
+            <file path="GoogleAnalytics/widget/"/>
+        </files>
+    </clientModule>
 </package>

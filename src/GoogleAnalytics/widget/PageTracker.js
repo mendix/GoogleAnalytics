@@ -1,23 +1,3 @@
-/*jslint white:true, nomen: true, plusplus: true */
-/*global mx, dojo, mxui, define, require, browser, devel, console, document, jQuery, ga, window */
-/*mendix */
-/*
- GoogleAnalytics
- ========================
-
- @file      : PageTracker.js
- @version   : 2.1.0
- @author    : Gerhard Richard Edens, Ismail Habib Muhammad
- @date      : Wed, 2 June 2015
- @copyright : Mendix b.v.
- @license   : Apache 2
-
- Documentation
- ========================
- Describe your widget here.
- */
-
-// Required module list. Remove unnecessary modules, you can always get them back from the boilerplate.
 define("GoogleAnalytics/widget/PageTracker", [
     "dojo/_base/declare", "mxui/widget/_WidgetBase", "dojo/_base/lang"
 ], function (declare, _WidgetBase, lang) {
@@ -26,24 +6,11 @@ define("GoogleAnalytics/widget/PageTracker", [
     // Declare widget"s prototype.
     return declare("GoogleAnalytics.widget.PageTracker", [_WidgetBase], {
 
-        // Parameters configured in the Modeler.
-        mfToExecute: "",
-        messageString: "",
-        backgroundColor: "",
-
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
-        _handles: null,
         _contextObj: null,
-        _alertDiv: null,
 
-        // dojo.declare.constructor is called to construct the widget instance. Implement to initialize non-primitive properties.
-        constructor: function () {
-            this._handles = [];
-        },
-
-        // dijit._WidgetBase.postCreate is called after constructing the widget. Implement to do extra setup work.
         postCreate: function () {
-            console.log(this.id + ".postCreate");
+            logger.debug(this.id + ".postCreate");
             this._insertGoogleAnalytics();
             this.connect(this.mxform, "onNavigation", function () {
                 // Track it or not?
@@ -53,14 +20,14 @@ define("GoogleAnalytics/widget/PageTracker", [
             });
         },
 
-        // mxui.widget._WidgetBase.update is called when context is changed or initialized. Implement to re-render and / or fetch data.
         update: function (obj, callback) {
-            console.log(this.id + ".update");
+            logger.debug(this.id + ".update");
             this._contextObj = obj;
             callback();
         },
 
         _addGoogle: function (i, s, o, g, r, a, m) {
+            logger.debug(this.id + "._addGoogle");
             if (typeof ga === "undefined") {
                 i.GoogleAnalyticsObject = r;
                 i[r] = i[r] || function () {
@@ -74,28 +41,28 @@ define("GoogleAnalytics/widget/PageTracker", [
                 m.parentNode.insertBefore(a, m);
             }
         },
+
         _insertGoogleAnalytics: function () {
-            this._addGoogle(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
+            logger.debug(this.id + "._insertGoogleAnalytics");
+            this._addGoogle(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
-                ga('create', this.uaTrackCode, 'auto');
+                ga("create", this.uaTrackCode, "auto");
             }
         },
-        _addPage: function () {
-            ga('send', {
-                'hitType': 'pageview',
-                'page': this.trackUrl,
-                'title': this.pageTitle
-            });
-        },
 
-        // mxui.widget._WidgetBase.uninitialize is called when the widget is destroyed. Implement to do special tear-down work.
-        uninitialize: function () {
-            // Clean up listeners, helper objects, etc. There is no need to remove listeners added with this.connect / this.subscribe / this.own.
+        _addPage: function () {
+            logger.debug(this.id + "._addPage");
+            ga("send", {
+                "hitType": "pageview",
+                "page": this.trackUrl,
+                "title": this.pageTitle
+            });
         }
 
     });
 });
+
 require(["GoogleAnalytics/widget/PageTracker"], function () {
     "use strict";
 });
