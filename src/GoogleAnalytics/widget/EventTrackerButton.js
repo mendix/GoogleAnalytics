@@ -21,7 +21,7 @@
 define("GoogleAnalytics/widget/EventTrackerButton", [
     "dojo/_base/declare", "mxui/widget/_Button", "dojo/_base/lang"
 ], function (declare, _Button, lang) {
-    
+
     // Declare widget"s prototype.
     return declare("GoogleAnalytics.widget.EventTrackerButton", [_Button], {
 
@@ -79,11 +79,11 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
 
         _addEvent: function () {
             if(this.addEvent){
-                ga('send', 
-                   'event', 
-                   this.category, 
-                   this.action, 
-                   (this._contextObj !== null) ? this._contextObj.get(this.label) : "", 
+                ga('send',
+                   'event',
+                   this.category,
+                   this.action,
+                   (this._contextObj !== null) ? this._contextObj.get(this.label) : "",
                    (this._contextObj !== null) ? this._contextObj.get(this.value) : "");
             }
         },
@@ -96,8 +96,14 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
                 self = this;
             if (a) {
                 mx.data.action({
-                    actionname: b,
-                    guids: [a.getGuid()],
+                    params       : {
+                        actionname : b,
+                        applyto     : "selection",
+                        guids       : [a.getGuid()]
+                    },
+                    store: {
+                        caller: this.mxform
+                    },
                     callback: function (objs) {
                         self._addEvent();
                     },
