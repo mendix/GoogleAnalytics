@@ -34,9 +34,9 @@
             </enumerationValues>
         </property>
         <property key="icon" type="image" required="false">
-            <caption>Image</caption>
+            <caption>Icon</caption>
             <category>Appearance</category>
-            <description>Image</description>
+            <description>Icon that appears in front of the caption</description>
         </property>
 
         <property key="onclickmf" type="microflow">
@@ -70,7 +70,7 @@
                 <attributeType name="String"/>
             </attributeTypes>
         </property>
-        <property key="value" type="attribute" required="false"> 
+        <property key="value" type="attribute" required="false">
             <caption>Value</caption>
             <category>Behavior</category>
             <description>Value</description>

@@ -7,9 +7,12 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
 
         // Internal variables. Non-primitives created in the prototype are shared between all widget instances.
         _contextObj: null,
+        _iconSet: false,
 
         postCreate: function () {
+            //logger.level(logger.DEBUG);
             logger.debug(this.id + ".postCreate");
+            this._iconSet = (this.icon === "");
             this._insertGoogleAnalytics();
             this.inherited(arguments);
         },
@@ -17,6 +20,10 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
         update: function (obj, callback) {
             logger.debug(this.id + ".update");
             this._contextObj = obj;
+            if (!this._iconSet) {
+                this._setIcon(this.icon, false);
+                this._iconSet = true;
+            }
             callback();
         },
 
