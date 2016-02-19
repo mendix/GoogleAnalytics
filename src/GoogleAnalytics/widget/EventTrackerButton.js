@@ -10,11 +10,13 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
         _iconSet: false,
 
         postCreate: function () {
-            //logger.level(logger.DEBUG);
+            logger.level(logger.DEBUG);
             logger.debug(this.id + ".postCreate");
             this._iconSet = (this.icon === "");
             this._insertGoogleAnalytics();
             this.inherited(arguments);
+
+            console.log(this);
         },
 
         update: function (obj, callback) {
@@ -58,7 +60,7 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
                 ga("send",
                    "event",
                    this.category,
-                   this.action,
+                   this.evt,
                    (this._contextObj !== null) ? this._contextObj.get(this.label) : "",
                    (this._contextObj !== null) ? this._contextObj.get(this.value) : "");
             }
