@@ -73,16 +73,29 @@ define("GoogleAnalytics/widget/AdvancedPageTracker", [
             }
         },
 
+        _setDimensions: function (callback) {
+            logger.debug(this.id + "._getDimensions");
+            for (var i = 0; i < this.metricDimensionList.length; i++) {
+                var dimension = this.metricDimensionList[i];
+                if (dimension.name.indexOf("dimension") === 0) {
+                    ga("set", dimension.name, dimension.attr);
+                }
+            }
+            callback();
+        },
+
         _addPage: function () {
             logger.debug(this.id + "._addPage");
             this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
-                    this._replaceTags(this.pageTitle, function (newPageTitle) {
-                        ga("send", {
-                            "hitType": "pageview",
-                            "page": newTrackUrl,
-                            "title": newPageTitle
+                    this._replaceTags(this.pageTitle, lang.hitch(this, function (newPageTitle) {
+                        this._setDimensions(function () {
+                            ga("send", {
+                                hitType: "pageview",
+                                page: newTrackUrl,
+                                title: newPageTitle
+                            });
                         });
-                    });
+                    }));
                 })
             );
         }

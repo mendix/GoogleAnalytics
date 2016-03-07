@@ -46,6 +46,26 @@
                 </property>
             </properties>
         </property>
+        <property key="metricDimensionList" type="object" isList="true" required="false">
+            <caption>Dimensions</caption>
+            <category>Data source</category>
+            <description>Here you can set Dimensions.</description>
+            <properties>
+                <property key="name" type="string" required="true">
+                    <caption>Name</caption>
+                    <category>Data source</category>
+                    <description>For a Dimension, set the name to 'dimensionX'. The X is a number. Any other name will be ignored</description>
+                </property>
+                <property key="attr" type="attribute" allowNonPersistableEntities="true">
+                    <caption>Attribute</caption>
+                    <category>Data source</category>
+                    <description>A dimension is always a String</description>
+                    <attributeTypes>
+                        <attributeType name="String" />
+                    </attributeTypes>
+                </property>
+            </properties>
+        </property>
         <property key="trackUrl" type="string" defaultValue="/">
             <caption>Url</caption>
             <category>Behavior</category>
@@ -68,4 +88,3 @@
         </property>
     </properties>
 </widget>
-
