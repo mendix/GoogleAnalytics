@@ -1,5 +1,11 @@
 # Google Analytics Custom Widget
 
+| | |
+| ------------- | ------------- |
+| AppStore:  | https://appstore.home.mendix.com/link/app/105/Mendix/Google-Analytics  |
+| Support Category: | [Mendix Community Content (MxCommunity)](https://world.mendix.com/display/howto50/App+Store+Content+Support) |
+| Offline Support:  | **No**  |
+
 Track pageviews and custom event with Google Analytics. If you have an e-commerce application, you can also use this widget to keep track of your transactions.
 
 ## Contributing
