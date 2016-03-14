@@ -29,6 +29,11 @@
             <category>Behavior</category>
             <description>The prefix that you want to be displayed in the Google Analytics. It is especially useful if you are using this widget in different apps while using the same tracked code (UA-XX-XXX)</description>
         </property>
+        <property key="includePageName" type="boolean" defaultValue="true">
+            <caption>Include module and page name</caption>
+            <category>Behavior</category>
+            <description>The value determines whether the submitted url to Google Analytics will include both the module and page name</description>
+        </property>
         <property key="trackIt" type="boolean" defaultValue="true">
             <caption>Active</caption>
             <category>Behavior</category>
@@ -76,4 +81,3 @@
         </property>
     </properties>
 </widget>
-
