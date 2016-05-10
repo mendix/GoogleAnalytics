@@ -85,22 +85,28 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
                 }));
             }
         },
-
+        _buildFullPath: function(prefix, includePageName, oriMendixPath) {
+          if (includePageName) {
+            var pageExtension = ".page.xml";
+            var path = oriMendixPath.substr(0, oriMendixPath.length - pageExtension.length);
+            return prefix + "/" + path;
+          } else {
+            return prefix;
+          }
+        },
         _addPage: function () {
             logger.debug(this.id + "._addPage");
-            var pageExtension = ".page.xml";
-            var oriPath = this.mxform.path;
-            var path = oriPath.substr(0, oriPath.length - pageExtension.length);
             if (typeof this.prefix !== "undefined" && this.prefix !== "") {
-                path = this.prefix + "/" + path;
+                this._replaceTags(this.prefix, lang.hitch(this, function(text) {
+                    var path = this._buildFullPath(text, this.includePageName, this.mxform.path)
+                    ga("send", {
+                        "hitType": "pageview",
+                        "page": path,
+                        "title": this.mxform.title
+                      });
+                }));
             }
-            ga("send", {
-                "hitType": "pageview",
-                "page": path,
-                "title": this.mxform.title
-            });
         }
-
     });
 });
 
