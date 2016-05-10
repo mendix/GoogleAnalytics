@@ -45,7 +45,7 @@ define("GoogleAnalytics/widget/AdvancedPageTracker", [
             for (var i = 0; i < this.metricDimensionList.length; i++) {
                 var dimension = this.metricDimensionList[i];
                 if (dimension.name.indexOf("dimension") === 0) {
-                    ga("set", dimension.name, dimension.attr);
+                    ga("set", dimension.name, this._contextObj.get(dimension.attr));
                 }
             }
             callback();
