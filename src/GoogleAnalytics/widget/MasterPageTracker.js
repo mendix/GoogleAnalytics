@@ -98,7 +98,7 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
             logger.debug(this.id + "._addPage");
             if (typeof this.prefix !== "undefined" && this.prefix !== "") {
                 this._replaceTags(this.prefix, lang.hitch(this, function(text) {
-                    var path = this._buildFullPath(text, this.includePageName, this.mxform.path)
+                    var path = this._buildFullPath(text, this.includePageName, this.mxform.path);
                     ga("send", {
                         "hitType": "pageview",
                         "page": path,
