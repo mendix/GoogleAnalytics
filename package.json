@@ -1,12 +1,11 @@
 {
   "name": "GoogleAnalytics",
-  "version": "3.3.1",
+  "version": "3.3.2",
   "description": "",
   "license": "",
   "author": "",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "grunt": "1.0.1",
     "grunt-contrib-clean": "^1.0.0",

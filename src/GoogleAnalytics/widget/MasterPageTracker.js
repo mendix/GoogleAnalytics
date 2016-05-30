@@ -96,16 +96,14 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
         },
         _addPage: function () {
             logger.debug(this.id + "._addPage");
-            if (typeof this.prefix !== "undefined" && this.prefix !== "") {
-                this._replaceTags(this.prefix, lang.hitch(this, function(text) {
-                    var path = this._buildFullPath(text, this.includePageName, this.mxform.path);
-                    ga("send", {
-                        "hitType": "pageview",
-                        "page": path,
-                        "title": this.mxform.title
-                      });
-                }));
-            }
+            this._replaceTags(this.prefix, lang.hitch(this, function(text) {
+                var path = this._buildFullPath(text, this.includePageName, this.mxform.path);
+                ga("send", {
+                    "hitType": "pageview",
+                    "page": path,
+                    "title": this.mxform.title
+                  });
+            }));
         }
     });
 });

@@ -9,6 +9,7 @@ define([
     return declare("GoogleAnalytics.widget.TrackerCore", [_WidgetBase], {
 
         _contextObj: null,
+        prefix: "",
 
         postCreate: function () {
             logger.debug(this.id + ".TrackerCore.postCreate");
