@@ -63,22 +63,13 @@ define("GoogleAnalytics/widget/MobilePageTracker", [
 
         _insertGoogleAnalytics: function () {
             logger.debug(this.id + "._insertGoogleAnalytics");
-            // this._addGoogle(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
-                    // var opts = { "cookieDomain": "auto" };
-
                     window.ga.startTrackerWithId(text, 0);
-
-                    window.ga.debugMode();
 
                     if (this.useridAttr !== "") {
                         var uid = this._contextObj.get(this.useridAttr);
-                        // opts.userId = uid;
-                        // ga("create", text, opts);
-                        // ga('set', 'checkProtocolTask', null);
-                        // ga("set", "&uid", uid);
 
                         window.ga.setUserId(uid)
 
@@ -115,6 +106,6 @@ define("GoogleAnalytics/widget/MobilePageTracker", [
     });
 });
 
-require(["GoogleAnalytics/widget/MasterPageTracker"], function () {
+require(["GoogleAnalytics/widget/MobilePageTracker"], function () {
     "use strict";
 });
