@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<widget id="GoogleAnalytics.widget.MobilePageTracker" needsEntityContext="true" xmlns="http://www.mendix.com/widget/1.0/">
+  <name>MobilePageTracker</name>
+  <description>The page tracker google analytics code.</description>
+  <icon>
+        iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJ
+        bWFnZVJlYWR5ccllPAAAAp1JREFUeNp0U99LU2EYfnY8bs61qZs/Bg5GRkwJO5jG8MbAURHURRdC
+        QdA/0I0gdN1tF1H9EUXQYt6EelGSjNAELxR1zunQuaFsS6dHp26u9zl6QsNe+A7f9533fZ/nfZ/3
+        s1Tm5oBCAVhcRCWfh8XjQX55Oajr+kOr1Tq0v7+/0djY+N7p93+Drs/B4QACAaC5GTQVJyfGBk1N
+        0NfXry9MT38qFApdxWIRR0dHqFQq17xe7zvHygpqamp+BTo6novvAhQFKJehGMGtrdBnZp5MTEws
+        ZbPZLkFGfX09BBkSDI+wqqqqwvb29u2f0eg8pqYeE1AuJQGpRKN3xsbGPlZXV6Ourg4Wi4XIAlAG
+        7xjMs8vlMs7RcPgLxse1Uwa7u5iMRN6oqora2lqp6KwkMe7J5vzZIT0gwMrIyGusrUE5iUTub21t
+        3XK73ReCaYrUSUTeM8hMQiabm5v35NOrxmKxfjr9a6RMVqR/fHxsnLmYiKtUKqG4uvpAFYe7rJU/
+        zwcfHh4aTXQ6nRApDTYmg1PRmiDMfQKiXmECM5B7kcugSZRkMvkX2fQ51x+rKhfDwmKIgaRMRP7c
+        2dmhbEYSE900JsvlcggGgzmlra3tO50oH1XY29tDOp1GXqaSvbHb7bDZbBcWlWFvbmjaD9XS1/f1
+        6uzsTCaT6SI9TiAd6HiZEZ3MfD7fEtrbwwo0DTdDoVepVMpoHOs3670smABUJTQw8BI9PTJI0mFJ
+        MtzZ2TnIbrOE/5k8MEMRTdNeoLc3wlFWOY7IZiGD9LalpSWZSCQ+iDx21nj2mIxyiN7Q0PC7u7v7
+        qTR8FBsbkAtJcKoNDg4O4Pf7I/5g0J2fn38Wj8f7JfCRKFOR0sIi66gAfHYFAqW1yUl4KKeo80eA
+        AQA+108un+UF/QAAAABJRU5ErkJggg==
+    </icon>
+    <properties>
+        <property key="uaTrackCode" type="string" defaultValue="UA-">
+            <caption>UA-XXX-XX</caption>
+            <category>Behavior</category>
+            <description>The UA-XXX-XX code for including google analytics code inside the webpage.</description>
+        </property>
+        <property key="prefix" type="string" defaultValue="" required="false">
+            <caption>URL prefix</caption>
+            <category>Behavior</category>
+            <description>The prefix that you want to be displayed in the Google Analytics. It is especially useful if you are using this widget in different apps while using the same tracked code (UA-XX-XXX)</description>
+        </property>
+        <property key="includePageName" type="boolean" defaultValue="true">
+            <caption>Include module and page name</caption>
+            <category>Behavior</category>
+            <description>The value determines whether the submitted url to Google Analytics will include both the module and page name</description>
+        </property>
+        <property key="trackIt" type="boolean" defaultValue="true">
+            <caption>Active</caption>
+            <category>Behavior</category>
+            <description>Enable/disable tracking</description>
+        </property>
+		<property key="useridAttr" type="attribute" required="false" allowNonPersistableEntities="true" isPath="optional" pathType="reference">
+            <caption>User ID attribute</caption>
+            <category>Data source</category>
+            <description>The value of this attribute will be used to uniquely identify the user in your Google Analytics.</description>
+            <attributeTypes>
+                <attributeType name="String" />
+            </attributeTypes>
+        </property>
+		<property key="userIdDimension" type="integer" defaultValue="0">
+            <caption>User ID dimension</caption>
+            <category>Data source</category>
+            <description>This value will be used to map the user to a custom dimension in your Google Analytics.</description>
+        </property>
+        <property key="attributeList" type="object" isList="true" required="false">
+            <caption>Attributes</caption>
+            <category>Data source</category>
+            <description></description>
+            <properties>
+                <property key="variableName" type="string" required="true">
+                    <caption>Variable name</caption>
+                    <category>Data source</category>
+                    <description>Identifies the attribute value, this name should be used in 'Display string' property.</description>
+                </property>
+                <property key="attr" type="attribute" allowNonPersistableEntities="true" isPath="optional" pathType="reference">
+                    <caption>Attribute</caption>
+                    <category>Data source</category>
+                    <description>Value of this attribute will be used to replace ${your_Variable_Name}, defined in 'Url' property</description>
+                    <attributeTypes>
+                        <attributeType name="AutoNumber"/>
+                        <attributeType name="String" />
+                        <attributeType name="Enum"/>
+                        <attributeType name="Integer"/>
+                        <attributeType name="Float"/>
+                        <attributeType name="Long"/>
+                        <attributeType name="DateTime"/>
+                        <attributeType name="Currency"/>
+                    </attributeTypes>
+                </property>
+            </properties>
+        </property>
+    </properties>
+</widget>
