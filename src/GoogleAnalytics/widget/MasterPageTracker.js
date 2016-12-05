@@ -63,7 +63,7 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
 
         _insertGoogleAnalytics: function () {
             logger.debug(this.id + "._insertGoogleAnalytics");
-            this._addGoogle(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
+            this._addGoogle(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
@@ -73,6 +73,7 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
                         var uid = this._contextObj.get(this.useridAttr);
                         opts.userId = uid;
                         ga("create", text, opts);
+                        ga('set', 'checkProtocolTask', null);
                         ga("set", "&uid", uid);
 
                         if (this.userIdDimension > 0)
