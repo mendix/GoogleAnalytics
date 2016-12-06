@@ -74,7 +74,7 @@ define("GoogleAnalytics/widget/MobilePageTracker", [
                         window.ga.setUserId(uid)
 
                         if (this.userIdDimension > 0) {
-                            window.ga.addCustomDimension(this.userIdDimensio, uid,
+                            window.ga.addCustomDimension(this.userIdDimension, uid,
                                 lang.hitch(this, function() {
                                     logger.debug("GA: Successfully added custom dimension " + this.userIdDimension);
                                 }),
