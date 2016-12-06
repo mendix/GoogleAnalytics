@@ -17,20 +17,24 @@ define("GoogleAnalytics/widget/MobilePageTracker", [
         update: function (obj, callback) {
             logger.debug(this.id + ".update");
             this._contextObj = obj;
-            if (!this._initialized) {
-                if (typeof window.mxGoogleAnalytics === "undefined") {
-                    this._insertGoogleAnalytics();
-                }
-                this._setupGlobalTrackerId();
 
-                this.connect(this.mxform, "onNavigation", function() {
-                    // Track it or not?
-                    if (this.trackIt) {
-                        this._addPage();
+            if (typeof window.cordova !== "undefined" && typeof window.ga === "object") {
+                if (!this._initialized) {
+                    if (typeof window.mxGoogleAnalytics === "undefined") {
+                        this._insertGoogleAnalytics();
                     }
-                });
-                this._initialized = true;
+                    this._setupGlobalTrackerId();
+
+                    this.connect(this.mxform, "onNavigation", function() {
+                        // Track it or not?
+                        if (this.trackIt) {
+                            this._addPage();
+                        }
+                    });
+                    this._initialized = true;
+                }
             }
+
             callback();
         },
 
