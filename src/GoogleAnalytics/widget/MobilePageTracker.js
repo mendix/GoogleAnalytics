@@ -70,24 +70,25 @@ define("GoogleAnalytics/widget/MobilePageTracker", [
 
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
-                    window.ga.startTrackerWithId(text, 0);
+                    window.ga.startTrackerWithId(text, 30, lang.hitch(this, function() {
+						if (this.useridAttr !== "") {
+							var uid = this._contextObj.get(this.useridAttr);
 
-                    if (this.useridAttr !== "") {
-                        var uid = this._contextObj.get(this.useridAttr);
+							window.ga.setUserId(uid)
 
-                        window.ga.setUserId(uid)
-
-                        if (this.userIdDimension > 0) {
-                            window.ga.addCustomDimension(this.userIdDimension, uid,
-                                lang.hitch(this, function() {
-                                    logger.debug("GA: Successfully added custom dimension " + this.userIdDimension);
-                                }),
-                                lang.hitch(this, function() {
-                                    logger.warn("GA: Failed to add custom dimension " + this.userIdDimension);
-                                })
-                            );
-                        }
-                    }
+							if (this.userIdDimension > 0) {
+								window.ga.addCustomDimension(this.userIdDimension, uid,
+									lang.hitch(this, function() {
+										logger.debug("GA: Successfully added custom dimension " + this.userIdDimension);
+									}),
+									lang.hitch(this, function() {
+										logger.warn("GA: Failed to add custom dimension " + this.userIdDimension);
+									})
+								);
+							}
+						}
+					}),
+					function() { logger.error('Could not start GA tracker') });
                 }));
             }
         },
