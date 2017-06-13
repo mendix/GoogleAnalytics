@@ -81,6 +81,4 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
     });
 });
 
-require(["GoogleAnalytics/widget/EventTrackerButton"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/EventTrackerButton"]);

@@ -29,6 +29,4 @@ define("GoogleAnalytics/widget/EventTracker", [
     });
 });
 
-require(["GoogleAnalytics/widget/EventTracker"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/EventTracker"]);

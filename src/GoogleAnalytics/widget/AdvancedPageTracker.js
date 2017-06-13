@@ -70,6 +70,4 @@ define("GoogleAnalytics/widget/AdvancedPageTracker", [
     });
 });
 
-require(["GoogleAnalytics/widget/AdvancedPageTracker"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/AdvancedPageTracker"]);

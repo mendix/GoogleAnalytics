@@ -32,6 +32,4 @@ define("GoogleAnalytics/widget/WebmasterTools", [
     });
 });
 
-require(["GoogleAnalytics/widget/WebmasterTools"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/WebmasterTools"]);
