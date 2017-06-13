@@ -30,6 +30,4 @@ define("GoogleAnalytics/widget/PageTracker", [
     });
 });
 
-require(["GoogleAnalytics/widget/PageTracker"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/PageTracker"]);

@@ -108,6 +108,4 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
     });
 });
 
-require(["GoogleAnalytics/widget/MasterPageTracker"], function () {
-    "use strict";
-});
+require(["GoogleAnalytics/widget/MasterPageTracker"]);
