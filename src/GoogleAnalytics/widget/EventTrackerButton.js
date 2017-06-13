@@ -42,22 +42,37 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
             logger.debug(this.id + ".onClick");
 
             if (this._contextObj) {
-                mx.data.action({
-                    params       : {
-                        actionname  : this.onclickmf,
-                        applyto     : "selection",
-                        guids       : [this._contextObj.getGuid()]
-                    },
-                    store: {
-                        caller: this.mxform
-                    },
-                    callback: lang.hitch(this, function (objs) {
-                        this._addEvent();
-                    }),
-                    error: function () {
-                        console.error(this.id + ".click: Microflow invocation failed");
-                    }
-                });
+                var sequenceHandlers = [];
+
+                // We're saving the form (ticket 53351) before we handle the microflow
+                sequenceHandlers.push(lang.hitch(this, function(callback) {
+                    this.mxform.save(callback, function(err) {
+                        if (!(err instanceof mendix.lib.ValidationError)) {
+                            window.mx.onError(err);
+                        }
+                    });
+                }));
+
+                sequenceHandlers.push(lang.hitch(this, function() {
+                    mx.data.action({
+                        params       : {
+                            actionname  : this.onclickmf,
+                            applyto     : "selection",
+                            guids       : [this._contextObj.getGuid()]
+                        },
+                        store: {
+                            caller: this.mxform
+                        },
+                        callback: lang.hitch(this, function (objs) {
+                            this._addEvent();
+                        }),
+                        error: function () {
+                            console.error(this.id + ".click: Microflow invocation failed");
+                        }
+                    });
+                }));
+
+                this.sequence(sequenceHandlers);
             } else {
                 console.error(this.id + ".click: no object in context");
             }

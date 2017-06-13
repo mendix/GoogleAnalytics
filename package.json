@@ -1,12 +1,11 @@
 {
   "name": "GoogleAnalytics",
-  "version": "3.3.2",
+  "version": "3.3.3",
   "description": "",
   "license": "",
   "author": "",
   "private": true,
-  "dependencies": {
-  },
+  "dependencies": {},
   "devDependencies": {
     "del": "^2.2.2",
     "gulp": "^3.9.1",
