@@ -40,11 +40,13 @@ define([
 
         _insertGoogleAnalytics: function () {
             logger.debug(this.id + ".TrackerCore._insertGoogleAnalytics");
-            this._addGoogle(window, document, "script", "//www.google-analytics.com/analytics.js", "ga");
-
+            this._addGoogle(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
+			
             if (typeof window.mxGoogleAnalytics === "undefined") {
                 ga("create", this.uaTrackCode, "auto");
             }
+			
+			ga("set", "checkProtocolTask", null);
         },
 
     });
