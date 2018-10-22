@@ -44,14 +44,26 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
             if (this._contextObj) {
                 var sequenceHandlers = [];
 
-                // We're saving the form (ticket 53351) before we handle the microflow
-                sequenceHandlers.push(lang.hitch(this, function(callback) {
-                    this.mxform.save(callback, function(err) {
-                        if (!(err instanceof mendix.lib.ValidationError)) {
-                            window.mx.onError(err);
-                        }
-                    });
-                }));
+                if (this.mxform.commit) {
+                    sequenceHandlers.push(lang.hitch(this, function (callback) {
+                        this.mxform.commit(callback, function (err) {
+                            if (!(err instanceof mendix.lib.ValidationError)) {
+                                window.mx.onError(err);
+                            }
+                        });
+                    }));
+                }
+
+                if (this.mxform.save) { // this will be removed in Mendix 8
+                    // We're saving the form (ticket 53351) before we handle the microflow
+                    sequenceHandlers.push(lang.hitch(this, function (callback) {
+                        this.mxform.save(callback, function (err) {
+                            if (!(err instanceof mendix.lib.ValidationError)) {
+                                window.mx.onError(err);
+                            }
+                        });
+                    }));
+                }
 
                 sequenceHandlers.push(lang.hitch(this, function() {
                     mx.data.action({
