@@ -2,10 +2,6 @@
 
 Track pageviews and custom event with Google Analytics. If you have an e-commerce application, you can also use this widget to keep track of your transactions.
 
-## Contributing
-
-For more information on contributing to this repository visit [Contributing to a GitHub repository](https://world.mendix.com/display/howto50/Contributing+to+a+GitHub+repository)!
-
 ## Typical usage scenario
  
 You want to track how often a product is viewed and inspect it in Google Analytics.
@@ -73,6 +69,3 @@ So that the webmaster tools can be activated and help with SEO on Mendix applica
 <script type="text/javascript" src="widgets/analytics/lib/Tracker.js" uanumber="UA-XXXXXXXX-X"></script>
 ```
 - Remove Analytics.mpk from your [%projectdir%]/widgets directory.
-
-
->>>>>>> b2964df6e963f3a4c797cc280f9111a37e8ebce5
