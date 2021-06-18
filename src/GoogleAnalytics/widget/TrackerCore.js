@@ -42,11 +42,19 @@ define([
             logger.debug(this.id + ".TrackerCore._insertGoogleAnalytics");
             this._addGoogle(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
 
-            if (typeof window.mxGoogleAnalytics === "undefined") {
-                ga("create", this.uaTrackCode, "auto");
-            }
+            if (this._gaScriptAvailable()) {
+                if (typeof window.mxGoogleAnalytics === "undefined") {
+                    ga("create", this.uaTrackCode, "auto");
+                }
 
-            ga("set", "checkProtocolTask", null);
+                ga("set", "checkProtocolTask", null);
+            } else {
+                logger.warn("Google Analytics script could not be loaded, please check if you dont have an ads blocker extension or tracking feature disabled.");
+            }
+        },
+
+        _gaScriptAvailable: function () {
+            return typeof ga !== "undefined";
         },
 
     });

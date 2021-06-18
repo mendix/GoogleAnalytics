@@ -45,7 +45,9 @@ define("GoogleAnalytics/widget/AdvancedPageTracker", [
             for (var i = 0; i < this.metricDimensionList.length; i++) {
                 var dimension = this.metricDimensionList[i];
                 if (dimension.name.indexOf("dimension") === 0) {
-                    ga("set", dimension.name, this._contextObj.get(dimension.attr));
+                    if (this._gaScriptAvailable()) {
+                        ga("set", dimension.name, this._contextObj.get(dimension.attr));
+                    }
                 }
             }
             callback();
@@ -55,13 +57,15 @@ define("GoogleAnalytics/widget/AdvancedPageTracker", [
             logger.debug(this.id + "._addPage");
             this._replaceTags(this.trackUrl, lang.hitch(this, function (newTrackUrl) {
                     this._replaceTags(this.pageTitle, lang.hitch(this, function (newPageTitle) {
-                        this._setDimensions(function () {
-                            ga("send", {
-                                hitType: "pageview",
-                                page: newTrackUrl,
-                                title: newPageTitle
-                            });
-                        });
+                        this._setDimensions(lang.hitch(this, function () {
+                            if (this._gaScriptAvailable()) {
+                                ga("send", {
+                                    hitType: "pageview",
+                                    page: newTrackUrl,
+                                    title: newPageTitle
+                                });
+                            }
+                        }));
                     }));
                 })
             );

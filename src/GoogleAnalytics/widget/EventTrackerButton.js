@@ -28,7 +28,7 @@ define("GoogleAnalytics/widget/EventTrackerButton", [
 
         _addEvent: function () {
             logger.debug(this.id + "._addEvent");
-            if (this.addEvent) {
+            if (this.addEvent && this._gaScriptAvailable()) {
                 ga("send",
                    "event",
                    this.category,

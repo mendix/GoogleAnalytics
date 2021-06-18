@@ -20,11 +20,13 @@ define("GoogleAnalytics/widget/PageTracker", [
 
         _addPage: function () {
             logger.debug(this.id + "._addPage");
-            ga("send", {
-                "hitType": "pageview",
-                "page": this.trackUrl,
-                "title": this.pageTitle
-            });
+            if (this._gaScriptAvailable()) {
+                ga("send", {
+                    "hitType": "pageview",
+                    "page": this.trackUrl,
+                    "title": this.pageTitle
+                });
+            }
         }
 
     });
