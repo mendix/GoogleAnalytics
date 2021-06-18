@@ -6,7 +6,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 ## 3.3.6 - 2021-06-18
 
 ### Changed
-- Fixed an issue while having ads blocker or tracking option disable in the browser.
+- Fixed the widget throwing errors and crashing the page while having ads blocker or tracking option disabled in the browser.
 
 ## Older releases
 See [marketplace](https://marketplace.mendix.com/link/component/105) for previous releases.
