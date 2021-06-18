@@ -18,12 +18,14 @@ define("GoogleAnalytics/widget/EventTracker", [
 
         _addEvent: function () {
             logger.debug(this.id + "._addEvent");
-            ga("send",
-               "event",
-               this.category,
-               this.action,
-               (this._contextObj !== null) ? this._contextObj.get(this.label) : "",
-               (this._contextObj !== null) ? this._contextObj.get(this.value) : "");
+            if (this._gaScriptAvailable()) {
+                ga("send",
+                    "event",
+                    this.category,
+                    this.action,
+                    (this._contextObj !== null) ? this._contextObj.get(this.label) : "",
+                    (this._contextObj !== null) ? this._contextObj.get(this.value) : "");
+            }
         }
 
     });

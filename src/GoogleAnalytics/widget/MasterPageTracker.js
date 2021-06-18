@@ -65,24 +65,28 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
             logger.debug(this.id + "._insertGoogleAnalytics");
             this._addGoogle(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
 
-            if (typeof window.mxGoogleAnalytics === "undefined") {
-                this._replaceTags(this.uaTrackCode, lang.hitch(this, function (text) {
-                    var opts = { "cookieDomain": "auto" };
+            if (this._gaScriptAvailable()) {
+                if (typeof window.mxGoogleAnalytics === "undefined") {
+                    this._replaceTags(this.uaTrackCode, lang.hitch(this, function(text) {
+                        var opts = { "cookieDomain": "auto" };
 
-                    if (this.useridAttr !== "") {
-                        var uid = this._contextObj.get(this.useridAttr);
-                        opts.userId = uid;
-                        ga("create", text, opts);
-                        ga("set", "&uid", uid);
+                        if (this.useridAttr !== "") {
+                            var uid = this._contextObj.get(this.useridAttr);
+                            opts.userId = uid;
+                            ga("create", text, opts);
+                            ga("set", "&uid", uid);
 
-                        if (this.userIdDimension > 0)
-                            ga("set", "dimension"+this.userIdDimension, uid);
+                            if (this.userIdDimension > 0)
+                                ga("set", "dimension" + this.userIdDimension, uid);
 
-                    } else {
-                        ga("create", text, opts);
-                    }
+                        } else {
+                            ga("create", text, opts);
+                        }
 
-                }));
+                    }));
+                }
+            } else {
+                logger.warn("Google Analytics script could not be loaded, please check if you dont have an ads blocker extension or tracking feature disabled.");
             }
         },
         _buildFullPath: function(prefix, includePageName, oriMendixPath) {
@@ -98,11 +102,13 @@ define("GoogleAnalytics/widget/MasterPageTracker", [
             logger.debug(this.id + "._addPage");
             this._replaceTags(this.prefix, lang.hitch(this, function(text) {
                 var path = this._buildFullPath(text, this.includePageName, this.mxform.path);
-                ga("send", {
-                    "hitType": "pageview",
-                    "page": path,
-                    "title": this.mxform.title
-                  });
+                if (this._gaScriptAvailable()) {
+                    ga("send", {
+                        "hitType": "pageview",
+                        "page": path,
+                        "title": this.mxform.title
+                    });
+                }
             }));
         }
     });
